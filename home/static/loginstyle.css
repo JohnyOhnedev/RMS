@@ -1,0 +1,142 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #0f3460, #16213e);
+    background-size: 300% 300%;
+    animation: gradientBG 15s ease infinite;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Login Container */
+.login-container {
+    background: rgba(10, 25, 47, 0.95); /* Matching dark blue tone */
+    border-radius: 20px;
+    box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.6);
+    padding: 40px 50px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.login-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0px 0px 15px rgba(38, 208, 206, 0.8); /* Teal glow */
+    color: #ffffff;
+}
+
+.login-container p {
+    margin-bottom: 25px;
+    font-size: 1rem;
+    color: #d3dfe9;
+    line-height: 1.6;
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #d3dfe9;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(38, 208, 206, 0.3); /* Subtle teal border */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    box-shadow: 0px 0px 12px rgba(38, 208, 206, 0.8);
+    border-color: rgba(38, 208, 206, 0.8);
+}
+
+/* Login Button */
+.login-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #26d0ce, #0f3460); /* Teal and deep blue */
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 8px 20px rgba(38, 208, 206, 0.4);
+    text-transform: uppercase;
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #0f3460, #26d0ce); /* Reverse gradient */
+    box-shadow: 0px 12px 25px rgba(38, 208, 206, 0.6);
+    transform: translateY(-3px);
+}
+
+.login-btn:active {
+    transform: translateY(2px);
+}
+
+/* Forgot Password Link */
+.forgot-password {
+    margin-top: 20px;
+    display: block;
+    font-size: 0.95rem;
+    color: #d3dfe9;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #ffffff;
+}
+
+/* Icons */
+label i, 
+button i, 
+h1 i, 
+.forgot-password i {
+    margin-right: 8px;
+    color: #26d0ce;
+}
+
+h1 i {
+    color: #26d0ce;
+    font-size: 1.5rem;
+}

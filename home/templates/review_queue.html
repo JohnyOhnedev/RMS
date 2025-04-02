@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Review Queue</title>
+</head>
+<body>
+    <h2>Pending Companies for Approval</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <th>Company Name</th>
+                <th>User</th>
+                <th>Approve</th>
+                <th>Reject</th>
+            </tr>
+            {% for company in companies %}
+            <tr>
+                <td>{{ company.name }}</td>
+                <td>{{ company.user.username }}</td>
+                <td><input type="radio" name="company_{{ company.id }}" value="approve"></td>
+                <td><input type="radio" name="company_{{ company.id }}" value="reject"></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

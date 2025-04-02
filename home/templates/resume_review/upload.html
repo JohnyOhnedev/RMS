@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Analyzer</title>
+</head>
+<body>
+    <h1>Upload Your Resume</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="resume">Select a file:</label>
+        <input type="file" name="resume" accept=".pdf,.docx,.txt" required>
+        <button type="submit">Analyze</button>
+    </form>
+</body>
+</html>
