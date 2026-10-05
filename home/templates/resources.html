@@ -1,27 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}Learning resources - {{ SITE_NAME }}{% endblock %}
+{% block title %}Learning resources — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:620px; margin:30px auto;">
-    <h2><i class="fas fa-book" style="color:var(--brand);"></i> Learning resources</h2>
-    <p style="color:var(--muted);">
-        Upload your resume and we will suggest courses for the fields your skills point to.
+<section class="card reveal" style="max-width:640px; margin:30px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-book"></i></span>
+    </div>
+    <h2 style="text-align:center;">Learning resources</h2>
+    <p style="color:var(--muted); text-align:center;">
+        Upload your resume and we'll suggest courses for the fields your skills point to.
     </p>
 
-    <form method="post" enctype="multipart/form-data" action="{% url 'home:recommend_resources' %}">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="resume">Choose your resume</label>
         <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
-        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
-        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+        <div class="help">Accepted: PDF, DOCX, TXT &middot; Maximum 8 MB</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">
             <i class="fas fa-graduation-cap"></i> Recommend resources
         </button>
     </form>
 </section>
 
 {% if resources %}
-<section class="card">
+<section class="card reveal">
     <h2><i class="fas fa-lightbulb" style="color:var(--brand);"></i> Recommended for you</h2>
     <p style="color:var(--muted);">Primary field: <strong>{{ reco_field }}</strong></p>
 
@@ -30,10 +33,10 @@
     {% endif %}
 
     {% for field, course_list in resources.items %}
-        <h3 style="margin-top:24px;">{{ field }}</h3>
+        <h3 style="margin-top:26px;">{{ field }}</h3>
         <ul style="padding-left:18px;">
             {% for course in course_list %}
-                <li style="margin-bottom:7px;">
+                <li style="margin-bottom:8px;">
                     {% if course.1 %}
                         <a href="{{ course.1 }}" target="_blank" rel="noopener noreferrer">{{ course.0 }}</a>
                     {% else %}{{ course.0 }}{% endif %}

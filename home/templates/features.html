@@ -1,74 +1,78 @@
 {% extends "base.html" %}
 
-{% block title %}Features - {{ SITE_NAME }}{% endblock %}
+{% block title %}Features — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="text-align:center;">
-    <h1 style="margin:0 0 8px;">Everything you need to land the interview</h1>
-    <p style="color:var(--muted); margin:0;">
-        {{ SITE_NAME }} combines ATS scoring, semantic job matching and curated learning paths.
-    </p>
+<section class="card hero reveal" data-tilt>
+    <h1>Everything you need to <span class="grad">land the interview</span></h1>
+    <p>{{ SITE_NAME }} combines ATS scoring, semantic job matching and curated learning paths in one place.</p>
 </section>
 
-<section class="grid">
-    <div class="card">
-        <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> ATS score &amp; review</h3>
+<section class="grid stagger">
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-magnifying-glass-chart"></i></span>
+        <h3>ATS score &amp; review</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
-            <li>0-100 score across contact, structure, skills, experience, education and impact</li>
+            <li>0–100 score across six weighted dimensions</li>
             <li>Quantified-achievement detection</li>
             <li>Prioritised action list</li>
         </ul>
-        <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Analyze resume</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'home:process_resume' %}">Analyze resume</a>
     </div>
 
-    <div class="card">
-        <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job role matching</h3>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-briefcase"></i></span>
+        <h3>Job role matching</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
-            <li>TF-IDF similarity against 20+ role profiles</li>
+            <li>TF-IDF similarity against 60+ role profiles</li>
             <li>Percentage match per role</li>
-            <li>Companies can extend the role dataset from their dashboard</li>
+            <li>Companies can extend the dataset live</li>
         </ul>
-        <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Match my resume</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'home:predict_roles' %}">Match my resume</a>
     </div>
 
-    <div class="card">
-        <h3><i class="fas fa-book" style="color:var(--brand);"></i> Learning resources</h3>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-book"></i></span>
+        <h3>Learning resources</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
             <li>Field detection from your skill set</li>
-            <li>Curated courses for Data Science, Web, Mobile, UX/UI</li>
+            <li>Curated courses across major fields</li>
             <li>Free and paid options</li>
         </ul>
-        <a class="btn btn-primary" href="{% url 'home:recommend_resources' %}">Get recommendations</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'home:recommend_resources' %}">Get recommendations</a>
     </div>
 
-    <div class="card">
-        <h3><i class="fas fa-comments" style="color:var(--brand);"></i> Interview plans</h3>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-comments"></i></span>
+        <h3>Interview plans</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
-            <li>Technical questions tailored to listed skills</li>
+            <li>Technical questions from listed skills</li>
             <li>Behavioural and culture-fit questions</li>
-            <li>Suggested practical task and red flags to probe</li>
+            <li>Suggested practical task and red flags</li>
         </ul>
-        <a class="btn btn-primary" href="{% url 'home:interview_plan' %}">Generate a plan</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'home:interview_plan' %}">Generate a plan</a>
     </div>
 
-    <div class="card">
-        <h3><i class="fas fa-building" style="color:var(--brand);"></i> For companies</h3>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-building"></i></span>
+        <h3>For companies</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
             <li>Register once, await admin approval</li>
             <li>Define roles and required skills</li>
-            <li>Match candidates against your live role data</li>
+            <li>Match candidates against live data</li>
         </ul>
-        <a class="btn btn-primary" href="{% url 'home:company_signup' %}">Register a company</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'home:company_signup' %}">Register a company</a>
     </div>
 
-    <div class="card">
-        <h3><i class="fas fa-shield-halved" style="color:var(--brand);"></i> Privacy &amp; safety</h3>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-shield-halved"></i></span>
+        <h3>Privacy &amp; safety</h3>
         <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
             <li>Uploads validated by type and size</li>
             <li>Duplicate detection via SHA-256</li>
-            <li>Works fully offline - AI features are optional</li>
+            <li>Works fully offline</li>
         </ul>
-        <a class="btn btn-ghost" href="{% url 'home:home' %}">Start now</a>
+        <a class="btn btn-ghost btn-sm" href="{% url 'home:home' %}">Start now</a>
     </div>
 </section>
 {% endblock %}

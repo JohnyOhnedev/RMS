@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Approval pending - {{ SITE_NAME }}{% endblock %}
+{% block title %}Approval pending — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:560px; margin:60px auto; text-align:center;">
-    <i class="fas fa-hourglass-half" style="font-size:44px; color:var(--warn);"></i>
+<section class="card reveal" data-tilt style="max-width:560px; margin:60px auto; text-align:center;">
+    <span class="icon-tile" style="width:62px; height:62px; font-size:26px; animation:pulseRing 2s ease-out infinite;">
+        <i class="fas fa-hourglass-half"></i>
+    </span>
     <h2>Approval pending</h2>
     <p style="color:var(--muted);">
         Your company registration is still being reviewed by an administrator.
-        You will receive an email as soon as it is approved.
+        You'll receive an email as soon as it's approved.
     </p>
     <a class="btn btn-primary" href="{% url 'home:home' %}">Back to home</a>
 </section>

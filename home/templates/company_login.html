@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Company login - {{ SITE_NAME }}{% endblock %}
+{% block title %}Login — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:440px; margin:40px auto;">
-    <h2><i class="fas fa-building" style="color:var(--brand);"></i> Company login</h2>
+<section class="card reveal" data-tilt style="max-width:440px; margin:36px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-building"></i></span>
+    </div>
+    <h2 style="text-align:center;">Company login</h2>
+    <p style="color:var(--muted); text-align:center; margin-bottom:6px;">Access your recruiting dashboard.</p>
 
     {% if error %}
         <div class="messages"><li class="error">{{ error }}</li></div>
@@ -18,10 +22,12 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" autocomplete="current-password" required>
 
-        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">Sign in</button>
+        <button type="submit" class="btn btn-primary" style="margin-top:22px; width:100%;">
+            <i class="fas fa-arrow-right-to-bracket"></i> Sign in
+        </button>
     </form>
 
-    <p style="text-align:center; margin-top:18px; font-size:14px;">
+    <p style="text-align:center; margin-top:20px; font-size:14px;">
         Not registered? <a href="{% url 'home:company_signup' %}">Register your company</a>
     </p>
 </section>

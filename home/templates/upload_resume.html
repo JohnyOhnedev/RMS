@@ -1,40 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}Job role matching - {{ SITE_NAME }}{% endblock %}
+{% block title %}Job role matching — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:620px; margin:30px auto;">
-    <h2><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job role matching</h2>
-    <p style="color:var(--muted);">
-        We compare your resume against 20+ job-role skill profiles and rank the closest matches.
+<section class="card reveal" style="max-width:640px; margin:30px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-briefcase"></i></span>
+    </div>
+    <h2 style="text-align:center;">Job role matching</h2>
+    <p style="color:var(--muted); text-align:center;">
+        We compare your resume against 60+ job-role skill profiles and rank the closest matches.
     </p>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="resume">Choose your resume</label>
         <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
-        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
-        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+        <div class="help">Accepted: PDF, DOCX, TXT &middot; Maximum 8 MB</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">
             <i class="fas fa-magnifying-glass"></i> Find matching roles
         </button>
     </form>
 </section>
 
 {% if predictions %}
-<section class="card">
+<section class="card reveal">
     <h2><i class="fas fa-ranking-star" style="color:var(--brand);"></i> Your best matches</h2>
     <table>
-        <thead><tr><th style="width:40px;">#</th><th>Job role</th><th style="width:45%;">Match</th></tr></thead>
+        <thead><tr><th style="width:44px;">#</th><th>Job role</th><th style="width:45%;">Match</th></tr></thead>
         <tbody>
         {% for role, score in predictions %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td style="font-weight:700; color:var(--brand);">{{ forloop.counter }}</td>
                 <td><strong>{{ role }}</strong></td>
                 <td>
-                    <div style="background:#eef2ff; border-radius:999px; height:10px; overflow:hidden; display:inline-block; width:70%; vertical-align:middle;">
-                        <div style="background:var(--brand); height:100%; width:{{ score }}%;"></div>
+                    <div class="bar" style="width:68%; display:inline-block; vertical-align:middle;">
+                        <span data-pct="{{ score }}"></span>
                     </div>
-                    <span style="margin-left:9px; font-weight:600;">{{ score }}%</span>
+                    <span style="margin-left:10px; font-weight:700;">{{ score }}%</span>
                 </td>
             </tr>
         {% endfor %}
@@ -42,17 +45,17 @@
     </table>
 
     {% if skills %}
-        <h3 style="margin-top:24px;">Skills we recognised</h3>
+        <h3 style="margin-top:26px;">Skills we recognised</h3>
         <p>{% for skill in skills %}<span class="badge good" style="margin:0 5px 5px 0;">{{ skill }}</span>{% endfor %}</p>
     {% endif %}
 
-    <p style="margin-top:22px;">
+    <p style="margin-top:24px; display:flex; gap:10px; flex-wrap:wrap;">
         <a class="btn btn-ghost" href="{% url 'home:recommend_resources' %}"><i class="fas fa-book"></i> Recommended courses</a>
         <a class="btn btn-ghost" href="{% url 'home:process_resume' %}"><i class="fas fa-magnifying-glass-chart"></i> Full ATS review</a>
     </p>
 </section>
 {% elif error %}
-<section class="card">
+<section class="card reveal">
     <h2>Could not process that file</h2>
     <p style="color:var(--bad);">{{ error }}</p>
     <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Try again</a>

@@ -18,6 +18,7 @@ versions and a proper service layer.
 | **Company workspace** | Companies register (subject to admin approval), define job roles and required skills. |
 | **Admin review queue** | Administrators approve or reject company registrations; approved companies receive an email. |
 | **Duplicate detection** | SHA-256 hashing prevents the same resume being uploaded twice. |
+| **Animated UI** | Glassmorphic surfaces, an ambient aurora background, scroll-reveal, count-up scores, animated progress bars, and card tilt — all progressive enhancement. |
 
 Everything works **fully offline**. AI features (Google Gemini) are optional and
 the app falls back to a deterministic local analyser when no API key is set.
@@ -130,7 +131,10 @@ rms/
 │   │   ├── ai_service.py      # Gemini integration + offline fallback
 │   │   └── helpers.py
 │   ├── templates/             # base.html + one template per page
-│   └── tests.py               # 37 tests
+│   ├── static/
+│   │   ├── app.css            # all styling: tokens, glass, animations
+│   │   └── app.js             # animation layer (scroll reveal, count-up, tilt)
+│   └── tests.py               # 39 tests
 ├── rms/
 │   ├── settings.py            # env-driven configuration
 │   └── urls.py

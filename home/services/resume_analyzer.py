@@ -60,6 +60,29 @@ class AnalysisResult:
     suggestions: list[str] = field(default_factory=list)
 
     @property
+    def subscore_rows(self) -> list[dict]:
+        """Subscores as display rows: label, points, max, and percentage.
+
+        The raw subscores are points out of each dimension's weight (e.g. 25/25),
+        so a percentage has to be derived for progress bars. Computing it here
+        keeps templates dumb and prevents the 250%-width bug.
+        """
+        rows = []
+        for name, points in self.subscores.items():
+            maximum = WEIGHTS.get(name, 0)
+            percent = round(points / maximum * 100) if maximum else 0
+            rows.append(
+                {
+                    "name": name,
+                    "label": name.replace("_", " ").capitalize(),
+                    "points": points,
+                    "max": maximum,
+                    "percent": max(0, min(100, percent)),
+                }
+            )
+        return rows
+
+    @property
     def grade(self) -> str:
         if self.score >= 85:
             return "Excellent"

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Login - {{ SITE_NAME }}{% endblock %}
+{% block title %}Login — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:440px; margin:40px auto;">
-    <h2><i class="fas fa-sign-in-alt" style="color:var(--brand);"></i> Sign in</h2>
-    <p style="color:var(--muted);">Access your dashboard and resume tools.</p>
+<section class="card reveal" data-tilt style="max-width:450px; margin:36px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-right-to-bracket"></i></span>
+    </div>
+    <h2 style="text-align:center;">Welcome back</h2>
+    <p style="color:var(--muted); text-align:center; margin-bottom:6px;">Sign in to access your dashboard and resume tools.</p>
 
     <form method="post" action="{% url 'home:login' %}">
         {% csrf_token %}
@@ -15,10 +18,12 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" autocomplete="current-password" required>
 
-        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">Sign in</button>
+        <button type="submit" class="btn btn-primary" style="margin-top:22px; width:100%;">
+            <i class="fas fa-arrow-right-to-bracket"></i> Sign in
+        </button>
     </form>
 
-    <p style="text-align:center; margin-top:18px; font-size:14px;">
+    <p style="text-align:center; margin-top:20px; font-size:14px;">
         No account? <a href="{% url 'home:signup' %}">Create one</a> &middot;
         <a href="{% url 'home:company_login' %}">Company login</a>
     </p>

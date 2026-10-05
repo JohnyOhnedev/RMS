@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - {{ SITE_NAME }}{% endblock %}
+{% block title %}Dashboard — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card">
+<section class="card reveal">
     <h2><i class="fas fa-gauge-high" style="color:var(--brand);"></i> Welcome, {{ user.get_short_name|default:user.username }}</h2>
     <p style="color:var(--muted);">Pick a tool to get started.</p>
 
-    <div class="grid" style="margin-top:18px;">
-        <div class="card" style="margin:0;">
-            <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> Resume review</h3>
+    <div class="grid stagger" style="margin-top:20px;">
+        <div class="card" data-tilt>
+            <span class="icon-tile"><i class="fas fa-magnifying-glass-chart"></i></span>
+            <h3>Resume review</h3>
             <p style="color:var(--muted); font-size:14px;">ATS score, section feedback and AI suggestions.</p>
-            <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Open</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'home:process_resume' %}">Open</a>
         </div>
-        <div class="card" style="margin:0;">
-            <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job matching</h3>
+        <div class="card" data-tilt>
+            <span class="icon-tile"><i class="fas fa-briefcase"></i></span>
+            <h3>Job matching</h3>
             <p style="color:var(--muted); font-size:14px;">See which roles your resume fits best.</p>
-            <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Open</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'home:predict_roles' %}">Open</a>
         </div>
-        <div class="card" style="margin:0;">
-            <h3><i class="fas fa-book" style="color:var(--brand);"></i> Resources</h3>
+        <div class="card" data-tilt>
+            <span class="icon-tile"><i class="fas fa-book"></i></span>
+            <h3>Resources</h3>
             <p style="color:var(--muted); font-size:14px;">Courses to close your skill gaps.</p>
-            <a class="btn btn-primary" href="{% url 'home:recommend_resources' %}">Open</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'home:recommend_resources' %}">Open</a>
         </div>
-        <div class="card" style="margin:0;">
-            <h3><i class="fas fa-comments" style="color:var(--brand);"></i> Interview plan</h3>
+        <div class="card" data-tilt>
+            <span class="icon-tile"><i class="fas fa-comments"></i></span>
+            <h3>Interview plan</h3>
             <p style="color:var(--muted); font-size:14px;">Generate role-specific interview questions.</p>
-            <a class="btn btn-primary" href="{% url 'home:interview_plan' %}">Open</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'home:interview_plan' %}">Open</a>
         </div>
     </div>
 </section>

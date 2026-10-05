@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Interview plan - {{ SITE_NAME }}{% endblock %}
+{% block title %}Interview plan — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:620px; margin:30px auto;">
-    <h2><i class="fas fa-comments" style="color:var(--brand);"></i> Interview plan generator</h2>
-    <p style="color:var(--muted);">
+<section class="card reveal" style="max-width:640px; margin:30px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-comments"></i></span>
+    </div>
+    <h2 style="text-align:center;">Interview plan generator</h2>
+    <p style="color:var(--muted); text-align:center;">
         Build a tailored interview plan for a candidate from their resume.
     </p>
 
@@ -13,8 +16,8 @@
         {% csrf_token %}
         <label for="resume">Candidate resume</label>
         <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
-        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
-        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+        <div class="help">Accepted: PDF, DOCX, TXT &middot; Maximum 8 MB</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">
             <i class="fas fa-list-check"></i> Generate interview plan
         </button>
     </form>

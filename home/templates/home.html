@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}{{ SITE_NAME }} - Improve your resume{% endblock %}
+{% block title %}{{ SITE_NAME }} — Improve your resume{% endblock %}
 
 {% block content %}
-<section class="card" style="text-align:center;">
-    <h1 style="margin:0 0 8px;"><i class="fas fa-file-alt" style="color:var(--brand);"></i> Welcome to {{ SITE_NAME }}</h1>
-    <p style="color:var(--muted); margin:0 0 22px;">
-        Enhance your resume and increase your chances of landing your dream job.
-        Get an instant ATS score, skill analysis and job-role matches.
+<section class="card hero" data-tilt>
+    <h1>Land more interviews with <span class="grad">smarter resume feedback</span></h1>
+    <p>
+        Upload your resume and get an instant ATS score, a section-by-section breakdown,
+        ranked job-role matches and the courses that close your skill gaps.
     </p>
 
     <form action="{% url 'home:home' %}" method="post" enctype="multipart/form-data"
@@ -16,35 +16,43 @@
         <label for="fileUpload">Upload your resume (PDF, DOCX or TXT)</label>
         <input type="file" id="fileUpload" name="file"
                accept=".pdf,.docx,.txt,.md,.rtf" required>
-        <div class="help">Your file is analysed immediately and never shared.</div>
-        <button type="submit" class="btn btn-primary" style="margin-top:16px; width:100%;">
+        <div class="help">Analysed immediately &middot; never shared &middot; works fully offline</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
             <i class="fas fa-wand-magic-sparkles"></i> Analyze my resume
         </button>
     </form>
 </section>
 
 {% if analysis %}
-<section class="card">
-    <h2><i class="fas fa-chart-simple"></i> Quick results</h2>
+<section class="card reveal">
+    <h2><i class="fas fa-chart-simple" style="color:var(--brand);"></i> Quick results</h2>
 
     {% if predictions %}
         <h3>Best-matching job roles</h3>
         <table>
-            <thead><tr><th>Job role</th><th>Match</th></tr></thead>
+            <thead><tr><th>Job role</th><th style="width:45%;">Match</th></tr></thead>
             <tbody>
             {% for role, score in predictions %}
-                <tr><td>{{ role }}</td><td><strong>{{ score }}%</strong></td></tr>
+                <tr>
+                    <td><strong>{{ role }}</strong></td>
+                    <td>
+                        <div class="bar" style="width:70%; display:inline-block; vertical-align:middle;">
+                            <span data-pct="{{ score }}"></span>
+                        </div>
+                        <span style="margin-left:10px; font-weight:600;">{{ score }}%</span>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
     {% endif %}
 
     {% if skills %}
-        <h3 style="margin-top:22px;">Skills detected</h3>
+        <h3 style="margin-top:24px;">Skills detected</h3>
         <p>{% for skill in skills %}<span class="badge good" style="margin:3px 4px 3px 0;">{{ skill }}</span>{% endfor %}</p>
     {% endif %}
 
-    <p style="margin-top:22px;">
+    <p style="margin-top:24px; display:flex; gap:10px; flex-wrap:wrap;">
         <a class="btn btn-primary" href="{% url 'home:process_resume' %}"><i class="fas fa-magnifying-glass-chart"></i> Full ATS review</a>
         <a class="btn btn-ghost" href="{% url 'home:predict_roles' %}"><i class="fas fa-briefcase"></i> Detailed job matching</a>
         <a class="btn btn-ghost" href="{% url 'home:recommend_resources' %}"><i class="fas fa-book"></i> Learning resources</a>
@@ -52,18 +60,38 @@
 </section>
 {% endif %}
 
-<section class="grid">
-    <div class="card">
-        <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> ATS Review</h3>
-        <p style="color:var(--muted);">A 0-100 score with per-section findings and a prioritised action list.</p>
+<section class="grid stagger" style="margin-top:6px;">
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-magnifying-glass-chart"></i></span>
+        <h3>ATS Review</h3>
+        <p style="color:var(--muted); font-size:14.5px;">
+            A 0–100 score across six weighted dimensions with a prioritised action list.
+        </p>
+        <a class="btn btn-ghost btn-sm" href="{% url 'home:process_resume' %}">Analyze</a>
     </div>
-    <div class="card">
-        <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job Matching</h3>
-        <p style="color:var(--muted);">TF-IDF similarity against 20+ real job roles, ranked by fit.</p>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-briefcase"></i></span>
+        <h3>Job Matching</h3>
+        <p style="color:var(--muted); font-size:14.5px;">
+            TF-IDF similarity against 60+ real job-role profiles, ranked by fit.
+        </p>
+        <a class="btn btn-ghost btn-sm" href="{% url 'home:predict_roles' %}">Match</a>
     </div>
-    <div class="card">
-        <h3><i class="fas fa-book" style="color:var(--brand);"></i> Resources</h3>
-        <p style="color:var(--muted);">Curated courses for the skills your resume is missing.</p>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-book"></i></span>
+        <h3>Resources</h3>
+        <p style="color:var(--muted); font-size:14.5px;">
+            Curated courses for the skills your resume is missing.
+        </p>
+        <a class="btn btn-ghost btn-sm" href="{% url 'home:recommend_resources' %}">Explore</a>
+    </div>
+    <div class="card" data-tilt>
+        <span class="icon-tile"><i class="fas fa-comments"></i></span>
+        <h3>Interview Plans</h3>
+        <p style="color:var(--muted); font-size:14.5px;">
+            Tailored technical, behavioural and culture-fit questions.
+        </p>
+        <a class="btn btn-ghost btn-sm" href="{% url 'home:interview_plan' %}">Generate</a>
     </div>
 </section>
 {% endblock %}

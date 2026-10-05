@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Analysis results - {{ SITE_NAME }}{% endblock %}
+{% block title %}Analysis results — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 {% if analysis %}
-<section class="card">
+<section class="card reveal">
     <h2><i class="fas fa-clipboard-check" style="color:var(--brand);"></i> Analysis results</h2>
 
     <div class="score-ring">
-        <div>
-            <div class="score-value">{{ analysis.score }}<span style="font-size:20px; color:var(--muted);">/100</span></div>
+        <div style="text-align:center;">
+            <div class="score-value"><span data-count="{{ analysis.score }}">0</span><span style="font-size:20px; color:var(--muted);">/100</span></div>
             <div class="badge {% if analysis.score >= 70 %}good{% elif analysis.score >= 55 %}warn{% else %}bad{% endif %}">{{ analysis.grade }}</div>
         </div>
-        <div style="flex:1; min-width:260px;">
+        <div style="flex:1; min-width:280px;">
             <table>
                 <tbody>
-                {% for name, value in analysis.subscores.items %}
+                {% for row in analysis.subscore_rows %}
                     <tr>
-                        <td style="text-transform:capitalize;">{{ name }}</td>
-                        <td style="width:60%;">
-                            <div style="background:#eef2ff; border-radius:999px; height:9px; overflow:hidden;">
-                                <div style="background:var(--brand); height:100%; width:{{ value }}0%;"></div>
-                            </div>
+                        <td style="font-weight:500;">{{ row.label }}</td>
+                        <td style="width:50%;">
+                            <div class="bar"><span data-pct="{{ row.percent }}"></span></div>
                         </td>
-                        <td style="text-align:right; font-weight:600;">{{ value }}</td>
+                        <td style="text-align:right; font-weight:700; white-space:nowrap;">
+                            {{ row.points }}<span style="color:var(--muted); font-weight:400;">/{{ row.max }}</span>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -34,7 +34,7 @@
 </section>
 
 <div class="grid">
-    <section class="card">
+    <section class="card reveal">
         <h3><i class="fas fa-circle-check" style="color:var(--ok);"></i> Strengths</h3>
         <ul style="padding-left:18px; margin:0;">
             {% for finding in analysis.good_findings %}<li>{{ finding.message }}</li>{% empty %}
@@ -42,7 +42,7 @@
         </ul>
     </section>
 
-    <section class="card">
+    <section class="card reveal">
         <h3><i class="fas fa-triangle-exclamation" style="color:var(--warn);"></i> Needs attention</h3>
         <ul style="padding-left:18px; margin:0;">
             {% for finding in analysis.warnings %}<li>{{ finding.message }}</li>{% empty %}
@@ -52,18 +52,18 @@
     </section>
 </div>
 
-<section class="card">
+<section class="card reveal">
     <h3><i class="fas fa-list-check" style="color:var(--brand);"></i> Action list</h3>
     <ol style="padding-left:20px; margin:0;">
         {% for tip in analysis.suggestions %}<li style="margin-bottom:7px;">{{ tip }}</li>{% endfor %}
     </ol>
 </section>
 
-<section class="card">
+<section class="card reveal">
     <h3><i class="fas fa-code" style="color:var(--brand);"></i> Detected skills</h3>
     {% if analysis.skills_by_category %}
         {% for category, skills in analysis.skills_by_category.items %}
-            <p style="margin:10px 0 4px; font-weight:600; font-size:14px;">{{ category }}</p>
+            <p style="margin:12px 0 5px; font-weight:600; font-size:14px;">{{ category }}</p>
             <p style="margin:0;">
                 {% for skill in skills %}<span class="badge good" style="margin:0 5px 5px 0;">{{ skill }}</span>{% endfor %}
             </p>
@@ -74,7 +74,7 @@
 </section>
 
 {% if recommendations %}
-<section class="card">
+<section class="card reveal">
     <h3>
         <i class="fas fa-robot" style="color:var(--brand);"></i> Career counsellor report
         {% if not ai_used %}<span class="badge warn">offline analysis</span>{% endif %}
@@ -83,12 +83,12 @@
 </section>
 {% endif %}
 
-<p style="text-align:center; margin:26px 0;">
+<p style="text-align:center; margin:26px 0; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
     <a class="btn btn-primary" href="{% url 'home:process_resume' %}"><i class="fas fa-rotate"></i> Analyze another resume</a>
     <a class="btn btn-ghost" href="{% url 'home:predict_roles' %}"><i class="fas fa-briefcase"></i> Match to job roles</a>
 </p>
 {% else %}
-<section class="card">
+<section class="card reveal">
     <h2>No analysis available</h2>
     <p style="color:var(--muted);">Upload a resume to get started.</p>
     <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Upload resume</a>
@@ -103,13 +103,8 @@
         var el = document.getElementById("recommendations");
         if (!el) return;
         var raw = {{ recommendations|default:""|escapejs|safe }};
-        if (window.marked) {
-            el.innerHTML = marked.parse(raw);
-        } else {
-            el.textContent = raw;
-        }
-        // Style generated markdown a little.
-        el.querySelectorAll("h1,h2,h3").forEach(function (h) { h.style.marginTop = "20px"; });
+        el.innerHTML = window.marked ? marked.parse(raw) : "";
+        if (!window.marked) el.textContent = raw;
     })();
 </script>
 {% endblock %}

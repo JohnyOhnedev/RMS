@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Upload resume - {{ SITE_NAME }}{% endblock %}
+{% block title %}Upload resume — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width:620px; margin:30px auto;">
-    <h2><i class="fas fa-cloud-arrow-up" style="color:var(--brand);"></i> Upload resume</h2>
-    <p style="color:var(--muted);">
+<section class="card reveal" style="max-width:640px; margin:30px auto;">
+    <div style="text-align:center; margin-bottom:6px;">
+        <span class="icon-tile" style="width:54px; height:54px; font-size:22px;"><i class="fas fa-cloud-arrow-up"></i></span>
+    </div>
+    <h2 style="text-align:center;">Upload resume</h2>
+    <p style="color:var(--muted); text-align:center;">
         Duplicate uploads are detected automatically using a content hash.
     </p>
 
@@ -13,13 +16,13 @@
         {% csrf_token %}
         <label for="resume">Choose your resume</label>
         <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
-        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
-        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+        <div class="help">Accepted: PDF, DOCX, TXT &middot; Maximum 8 MB</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">
             <i class="fas fa-upload"></i> Upload
         </button>
     </form>
 
-    <div id="result" style="margin-top:16px;"></div>
+    <div id="result" style="margin-top:18px;"></div>
 </section>
 {% endblock %}
 
@@ -30,9 +33,9 @@
         var form = event.target;
         var data = new FormData(form);
         var box = document.getElementById("result");
-        box.innerHTML = "<p>Uploading...</p>";
+        box.innerHTML = '<p><span class="spinner" style="border-color:rgba(99,102,241,.4);border-top-color:var(--brand);"></span> Uploading…</p>';
 
-        fetch(form.action || window.location.href, {
+        fetch(window.location.href, {
             method: "POST",
             body: data,
             headers: { "X-Requested-With": "XMLHttpRequest" },
