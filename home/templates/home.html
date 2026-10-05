@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITE_NAME }} - Improve your resume{% endblock %}
+
+{% block content %}
+<section class="card" style="text-align:center;">
+    <h1 style="margin:0 0 8px;"><i class="fas fa-file-alt" style="color:var(--brand);"></i> Welcome to {{ SITE_NAME }}</h1>
+    <p style="color:var(--muted); margin:0 0 22px;">
+        Enhance your resume and increase your chances of landing your dream job.
+        Get an instant ATS score, skill analysis and job-role matches.
+    </p>
+
+    <form action="{% url 'home:home' %}" method="post" enctype="multipart/form-data"
+          style="max-width:520px; margin:0 auto; text-align:left;">
+        {% csrf_token %}
+        <label for="fileUpload">Upload your resume (PDF, DOCX or TXT)</label>
+        <input type="file" id="fileUpload" name="file"
+               accept=".pdf,.docx,.txt,.md,.rtf" required>
+        <div class="help">Your file is analysed immediately and never shared.</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:16px; width:100%;">
+            <i class="fas fa-wand-magic-sparkles"></i> Analyze my resume
+        </button>
+    </form>
+</section>
+
+{% if analysis %}
+<section class="card">
+    <h2><i class="fas fa-chart-simple"></i> Quick results</h2>
+
+    {% if predictions %}
+        <h3>Best-matching job roles</h3>
+        <table>
+            <thead><tr><th>Job role</th><th>Match</th></tr></thead>
+            <tbody>
+            {% for role, score in predictions %}
+                <tr><td>{{ role }}</td><td><strong>{{ score }}%</strong></td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if skills %}
+        <h3 style="margin-top:22px;">Skills detected</h3>
+        <p>{% for skill in skills %}<span class="badge good" style="margin:3px 4px 3px 0;">{{ skill }}</span>{% endfor %}</p>
+    {% endif %}
+
+    <p style="margin-top:22px;">
+        <a class="btn btn-primary" href="{% url 'home:process_resume' %}"><i class="fas fa-magnifying-glass-chart"></i> Full ATS review</a>
+        <a class="btn btn-ghost" href="{% url 'home:predict_roles' %}"><i class="fas fa-briefcase"></i> Detailed job matching</a>
+        <a class="btn btn-ghost" href="{% url 'home:recommend_resources' %}"><i class="fas fa-book"></i> Learning resources</a>
+    </p>
+</section>
+{% endif %}
+
+<section class="grid">
+    <div class="card">
+        <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> ATS Review</h3>
+        <p style="color:var(--muted);">A 0-100 score with per-section findings and a prioritised action list.</p>
+    </div>
+    <div class="card">
+        <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job Matching</h3>
+        <p style="color:var(--muted);">TF-IDF similarity against 20+ real job roles, ranked by fit.</p>
+    </div>
+    <div class="card">
+        <h3><i class="fas fa-book" style="color:var(--brand);"></i> Resources</h3>
+        <p style="color:var(--muted);">Curated courses for the skills your resume is missing.</p>
+    </div>
+</section>
+{% endblock %}

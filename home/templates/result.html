@@ -1,177 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Result</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends "base.html" %}
 
-        /* Body Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a2980, #26d0ce, #141e30);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            /* color: #ffffff; */
-            /* color: #0f1e8b; */
-            color:#1a2980;
-            overflow-x: hidden;
-        }
+{% block title %}Analysis results - {{ SITE_NAME }}{% endblock %}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+{% block content %}
+{% if analysis %}
+<section class="card">
+    <h2><i class="fas fa-clipboard-check" style="color:var(--brand);"></i> Analysis results</h2>
 
-        /* Header Styling */
-        header {
-            width: 100%;
-            padding: 20px 0;
-            background: linear-gradient(to right, rgba(26, 41, 128, 0.95), rgba(38, 208, 206, 0.95));
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0px 0px 15px #26d0ce;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            font-size: 1.5rem;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1rem;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: #26d0ce;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #26d0ce;
-        }
-
-        .nav-links a:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        /* Main Container Styling */
-        .result-container {
-            margin: 150px auto;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            backdrop-filter: blur(10px);
-            animation: fadeInResult 2s ease forwards;
-        }
-
-        @keyframes fadeInResult {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
-
-        .result-container h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0px 0px 15px #26d0ce;
-        }
-
-        .result-content {
-            font-size: 1.2rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-        }
-
-        .result-container a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #4CAF50, #2ECC71);
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1.2rem;
-            border-radius: 5px;
-            text-align: center;
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-
-        .result-container a:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, #2ECC71, #4CAF50);
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-            <ul class="nav-links">
-                <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="{% url 'features' %}"><i class="fas fa-star"></i> Features</a></li>
-                <!-- <li><a href="testimonial.html"><i class="fas fa-comments"></i> Testimonials</a></li>
-                <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li> -->
-            </ul>
-        </nav>
-    </header>
-    <section class="result-container">
-        <h1><i class="fas fa-clipboard-list"></i>Recommendations</h1>
-        <div class="result-content">
-            {{ recommendations }}
+    <div class="score-ring">
+        <div>
+            <div class="score-value">{{ analysis.score }}<span style="font-size:20px; color:var(--muted);">/100</span></div>
+            <div class="badge {% if analysis.score >= 70 %}good{% elif analysis.score >= 55 %}warn{% else %}bad{% endif %}">{{ analysis.grade }}</div>
         </div>
-        <!--Analyze another resume-->
+        <div style="flex:1; min-width:260px;">
+            <table>
+                <tbody>
+                {% for name, value in analysis.subscores.items %}
+                    <tr>
+                        <td style="text-transform:capitalize;">{{ name }}</td>
+                        <td style="width:60%;">
+                            <div style="background:#eef2ff; border-radius:999px; height:9px; overflow:hidden;">
+                                <div style="background:var(--brand); height:100%; width:{{ value }}0%;"></div>
+                            </div>
+                        </td>
+                        <td style="text-align:right; font-weight:600;">{{ value }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p class="help">{{ analysis.word_count }} words analysed.</p>
+</section>
+
+<div class="grid">
+    <section class="card">
+        <h3><i class="fas fa-circle-check" style="color:var(--ok);"></i> Strengths</h3>
+        <ul style="padding-left:18px; margin:0;">
+            {% for finding in analysis.good_findings %}<li>{{ finding.message }}</li>{% empty %}
+            <li style="color:var(--muted);">Nothing stood out yet.</li>{% endfor %}
+        </ul>
     </section>
-</body>
-</html>
+
+    <section class="card">
+        <h3><i class="fas fa-triangle-exclamation" style="color:var(--warn);"></i> Needs attention</h3>
+        <ul style="padding-left:18px; margin:0;">
+            {% for finding in analysis.warnings %}<li>{{ finding.message }}</li>{% empty %}
+            <li style="color:var(--muted);">No warnings.</li>{% endfor %}
+            {% for finding in analysis.problems %}<li style="color:var(--bad);">{{ finding.message }}</li>{% endfor %}
+        </ul>
+    </section>
+</div>
+
+<section class="card">
+    <h3><i class="fas fa-list-check" style="color:var(--brand);"></i> Action list</h3>
+    <ol style="padding-left:20px; margin:0;">
+        {% for tip in analysis.suggestions %}<li style="margin-bottom:7px;">{{ tip }}</li>{% endfor %}
+    </ol>
+</section>
+
+<section class="card">
+    <h3><i class="fas fa-code" style="color:var(--brand);"></i> Detected skills</h3>
+    {% if analysis.skills_by_category %}
+        {% for category, skills in analysis.skills_by_category.items %}
+            <p style="margin:10px 0 4px; font-weight:600; font-size:14px;">{{ category }}</p>
+            <p style="margin:0;">
+                {% for skill in skills %}<span class="badge good" style="margin:0 5px 5px 0;">{{ skill }}</span>{% endfor %}
+            </p>
+        {% endfor %}
+    {% else %}
+        <p style="color:var(--muted);">No recognisable skills detected. Add a dedicated Skills section.</p>
+    {% endif %}
+</section>
+
+{% if recommendations %}
+<section class="card">
+    <h3>
+        <i class="fas fa-robot" style="color:var(--brand);"></i> Career counsellor report
+        {% if not ai_used %}<span class="badge warn">offline analysis</span>{% endif %}
+    </h3>
+    <div class="markdown" id="recommendations"></div>
+</section>
+{% endif %}
+
+<p style="text-align:center; margin:26px 0;">
+    <a class="btn btn-primary" href="{% url 'home:process_resume' %}"><i class="fas fa-rotate"></i> Analyze another resume</a>
+    <a class="btn btn-ghost" href="{% url 'home:predict_roles' %}"><i class="fas fa-briefcase"></i> Match to job roles</a>
+</p>
+{% else %}
+<section class="card">
+    <h2>No analysis available</h2>
+    <p style="color:var(--muted);">Upload a resume to get started.</p>
+    <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Upload resume</a>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    (function () {
+        var el = document.getElementById("recommendations");
+        if (!el) return;
+        var raw = {{ recommendations|default:""|escapejs|safe }};
+        if (window.marked) {
+            el.innerHTML = marked.parse(raw);
+        } else {
+            el.textContent = raw;
+        }
+        // Style generated markdown a little.
+        el.querySelectorAll("h1,h2,h3").forEach(function (h) { h.style.marginTop = "20px"; });
+    })();
+</script>
+{% endblock %}

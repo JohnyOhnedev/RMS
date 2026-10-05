@@ -1,231 +1,61 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Resume</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends "base.html" %}
 
-        /* Body Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a2980, #26d0ce, #141e30);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+{% block title %}Job role matching - {{ SITE_NAME }}{% endblock %}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+{% block content %}
+<section class="card" style="max-width:620px; margin:30px auto;">
+    <h2><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job role matching</h2>
+    <p style="color:var(--muted);">
+        We compare your resume against 20+ job-role skill profiles and rank the closest matches.
+    </p>
 
-        /* Header Styling */
-        header {
-            width: 100%;
-            padding: 20px 0;
-            background: linear-gradient(to right, rgba(26, 41, 128, 0.95), rgba(38, 208, 206, 0.95));
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0px 0px 15px #26d0ce;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Upload Section */
-        .upload-container {
-            margin: 150px auto;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .upload-container h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .upload-container input[type="file"] {
-            margin: 20px 0;
-            padding: 10px;
-        }
-
-        .upload-container button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #4CAF50, #2ECC71);
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.5s ease;
-        }
-
-        .loading-screen.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .circular-progress {
-            width: 150px;
-            height: 150px;
-            position: relative;
-        }
-
-        .circular-progress .circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(#26d0ce 0%, #1a2980 50%, transparent 0);
-            animation: rotate 2s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
-            color: #ffffff;
-        }
-
-        
-        .upload-container2 {
-    margin: 50px auto;
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 40px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-}
-
-.upload-container2 h2 {
-    font-size: 2rem;
-    color: white;
-}
-
-.upload-container2 ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.upload-container2 li {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: white;
-}
-
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-            <ul class="nav-links">
-                <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="{% url 'features' %}"><i class="fas fa-star"></i> Features</a></li>
-                
-            </ul>
-        </nav> 
-    </header>
-
-    <section class="upload-container">
-        <h1><i class="fas fa-upload"></i> Upload Your Resume</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="resume">Select a file:</label>
-            <input type="file" name="resume" accept=".pdf,.docx,.txt" required>
-            <button type="submit">Analyze</button>
-        </form>
-    </section>
-
-   
-    
-    {% if predictions %}
-<section class="upload-container2">
-    <h2>Top Suitable Job Roles:</h2>
-    <ul>
-        {% for role, score in predictions %}
-            <li>{{ role }}: {{ score|floatformat:2 }}%</li>
-        {% endfor %}
-    </ul>
-    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="resume">Choose your resume</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
+        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+            <i class="fas fa-magnifying-glass"></i> Find matching roles
+        </button>
+    </form>
 </section>
 
+{% if predictions %}
+<section class="card">
+    <h2><i class="fas fa-ranking-star" style="color:var(--brand);"></i> Your best matches</h2>
+    <table>
+        <thead><tr><th style="width:40px;">#</th><th>Job role</th><th style="width:45%;">Match</th></tr></thead>
+        <tbody>
+        {% for role, score in predictions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><strong>{{ role }}</strong></td>
+                <td>
+                    <div style="background:#eef2ff; border-radius:999px; height:10px; overflow:hidden; display:inline-block; width:70%; vertical-align:middle;">
+                        <div style="background:var(--brand); height:100%; width:{{ score }}%;"></div>
+                    </div>
+                    <span style="margin-left:9px; font-weight:600;">{{ score }}%</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if skills %}
+        <h3 style="margin-top:24px;">Skills we recognised</h3>
+        <p>{% for skill in skills %}<span class="badge good" style="margin:0 5px 5px 0;">{{ skill }}</span>{% endfor %}</p>
+    {% endif %}
+
+    <p style="margin-top:22px;">
+        <a class="btn btn-ghost" href="{% url 'home:recommend_resources' %}"><i class="fas fa-book"></i> Recommended courses</a>
+        <a class="btn btn-ghost" href="{% url 'home:process_resume' %}"><i class="fas fa-magnifying-glass-chart"></i> Full ATS review</a>
+    </p>
+</section>
+{% elif error %}
+<section class="card">
+    <h2>Could not process that file</h2>
+    <p style="color:var(--bad);">{{ error }}</p>
+    <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Try again</a>
+</section>
 {% endif %}
-
-     
-
-    
-    <div class="loading-screen" id="loadingScreen">
-        <div class="circular-progress">
-            <div class="circle"></div>
-            <div class="loading-text">Analyzing Your Resume...</div>
-        </div>
-    </div>
-
-    <script>
-        const form = document.querySelector('form');
-        const loadingScreen = document.getElementById('loadingScreen');
-
-        form.addEventListener('submit', function (e) {
-            loadingScreen.classList.add('active');
-        });
-    </script>
-</body>
-</html> 
-
+{% endblock %}

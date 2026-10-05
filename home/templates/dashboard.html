@@ -1,144 +1,80 @@
- {% load custom_filters %}
- {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company Dashboard</title>
+{% extends "base.html" %}
+{% load custom_filters %}
 
-    <script>
-        function fetchSkills() {
-            let jobRole = document.getElementById("job_role").value.trim();
+{% block title %}Company dashboard - {{ SITE_NAME }}{% endblock %}
 
-            if (jobRole) {
-                fetch(`/fetch-skills/?job_role=${encodeURIComponent(jobRole)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.skills) {
-                            document.getElementById("existing_skills").innerHTML = `<strong>Existing Skills:</strong> ${data.skills}`;
-                        } else {
-                            document.getElementById("existing_skills").innerHTML = "<strong>No existing skills found.</strong>";
-                        }
-                        document.getElementById("skills").value = ""; // Always clear the textarea
-                    })
-                    .catch(error => console.error("Error fetching skills:", error));
-            } else {
-                document.getElementById("existing_skills").innerHTML = ""; // Clear if no input
-            }
-        }
-    </script>
+{% block content %}
+<section class="card">
+    <h2><i class="fas fa-gauge-high" style="color:var(--brand);"></i> Company dashboard</h2>
+    <p style="color:var(--muted);">
+        Manage the job roles and required skills used to match candidate resumes.
+    </p>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Checker</title>
-    <link rel="stylesheet" href="{% static 'homepagestyle.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <div class="grid">
+        <div>
+            <h3><i class="fas fa-plus-circle" style="color:var(--brand);"></i> Add or update a role</h3>
+            <form method="post" action="{% url 'home:company_dashboard' %}">
+                {% csrf_token %}
+                <label for="job_role">Job role</label>
+                <input type="text" id="job_role" name="job_role" list="role-list"
+                       placeholder="e.g. Backend Developer" oninput="fetchSkills()" required>
+                <datalist id="role-list">
+                    {% for role in data %}<option value="{{ role }}"></option>{% endfor %}
+                </datalist>
 
-     <style>
-        body {
-            font-size: 22px;
-        }
-        h2 {
-            font-size: 28px;
-        }
-        p, label, input, textarea, button {
-            font-size: 22px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 22px;
-        }
-    </style> 
-</head>
-<header>
-    <nav class="navbar">
-        <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-        <ul class="nav-links">
-            <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-            <!-- <li><a href="#"><i class="fas fa-star"></i> Features</a></li>
-            <li><a href="testimonial.html"><i class="fas fa-comments"></i> Testimonials</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li> -->
-            <a href="{% url 'home' %}">Logout</a>
-        </ul>
-        <!-- <div class="profile">
-            <button class="profile-button"><i class="fas fa-user"></i> Profile</button>
-            <div class="profile-dropdown">
-                
-                <a href="{% url 'home' %}">Logout</a>
+                <div id="existing_skills" class="help"></div>
+
+                <label for="skills">Skills (comma separated)</label>
+                <textarea id="skills" name="skills" rows="4"
+                          placeholder="python, django, postgresql, rest api" required></textarea>
+                <div class="help">Existing skills are merged with the ones you add.</div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:16px; width:100%;">
+                    <i class="fas fa-floppy-disk"></i> Save role
+                </button>
+            </form>
+        </div>
+
+        <div>
+            <h3><i class="fas fa-list" style="color:var(--brand);"></i> Registered roles ({{ data|length }})</h3>
+            <div style="max-height:460px; overflow-y:auto; border:1px solid var(--line); border-radius:10px;">
+                <table>
+                    <thead><tr><th>Role</th><th>Skills</th></tr></thead>
+                    <tbody>
+                    {% for role, skills in data.items %}
+                        <tr>
+                            <td><strong>{{ role }}</strong></td>
+                            <td style="font-size:12px; color:var(--muted);">{{ skills|truncatechars:140 }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div> -->
-    </nav>
-</header>
-<body>
+        </div>
+    </div>
+</section>
+{% endblock %}
 
-    <div class="container">
-        <h2>Welcome to Your Dashboard</h2>
-        <p>Hello, <strong>{{ request.user.username }}</strong>!</p>
-        <!-- <p>Your company has been approved, and you now have full access to the system.</p> -->
-        <!-- <a href="project test 1.html" class="logout-btn">Logout</a> -->
-
-        <h2>Add or Update a Job Role</h2>
-        <form method="POST">
-            {% csrf_token %}
-            
-            <label for="job_role"><strong>Job Role:</strong></label>
-            <input type="text" id="job_role" name="job_role" value="{{ job_role }}" required 
-                   placeholder="Enter job role" onkeyup="fetchSkills()">
-
-            <p id="existing_skills">{% if current_skills %}<strong>Existing Skills:</strong> {{ current_skills }}{% endif %}</p>
-
-            <label for="skills"><strong>Add New Skills (comma-separated):</strong></label>
-            <textarea id="skills" name="skills" placeholder="Enter new skills..."></textarea>
-
-            <button type="submit">Submit</button>
-        </form>
-
-        
-        <!-- <h2>Find the Best Matching Resumes</h2>
-<form onsubmit="searchResumes(event)">
-    <label for="search_job_role"><strong>Job Role:</strong></label>
-    <input type="text" id="search_job_role" placeholder="Enter job role to find resumes" required>
-    <button type="submit">Search</button>
-</form> -->
-
-<div id="resume_results"></div>
-
+{% block extra_js %}
 <script>
-    function searchResumes(event) {
-        event.preventDefault();
-        let jobRole = document.getElementById("search_job_role").value.trim();
-        let resultContainer = document.getElementById("resume_results");
+    function fetchSkills() {
+        var role = document.getElementById("job_role").value.trim();
+        var box = document.getElementById("existing_skills");
+        var textarea = document.getElementById("skills");
 
-        if (!jobRole) {
-            resultContainer.innerHTML = "<p style='color: red;'>Please enter a job role.</p>";
-            return;
-        }
+        if (!role) { box.innerHTML = ""; return; }
 
-        fetch(`/search-resumes/?job_role=${encodeURIComponent(jobRole)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.resumes.length > 0) {
-                    let results = "<h3>Matching Resumes</h3><ul>";
-                    data.resumes.forEach(resume => {
-                        results += `<li>
-                            <strong>Score: ${resume.score.toFixed(2)}</strong><br>
-                            <a href="${resume.file_url}" target="_blank">Download Resume</a>
-                        </li>`;
-                    });
-                    results += "</ul>";
-                    resultContainer.innerHTML = results;
+        fetch("{% url 'home:fetch_skills' %}?job_role=" + encodeURIComponent(role))
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.skills) {
+                    box.innerHTML = "<strong>Existing skills:</strong> " + data.skills;
                 } else {
-                    resultContainer.innerHTML = "<p style='color: red;'>No matching resumes found.</p>";
+                    box.innerHTML = "<em>No existing skills for this role - a new one will be created.</em>";
                 }
+                textarea.value = "";
             })
-            .catch(error => console.error("Error fetching resumes:", error));
+            .catch(function () { box.innerHTML = ""; });
     }
 </script>
-    </div>
-
-</body>
-</html> 
-
-
+{% endblock %}

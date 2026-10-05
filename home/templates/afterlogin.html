@@ -1,183 +1,33 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Checker</title>
-    <link rel="stylesheet" href="{% static 'homepagestyle.css' %}">
+{% extends "base.html" %}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Reset styles to avoid conflicts */
-        body, h1, h2, p, ul, li, a {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block title %}Dashboard - {{ SITE_NAME }}{% endblock %}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+{% block content %}
+<section class="card">
+    <h2><i class="fas fa-gauge-high" style="color:var(--brand);"></i> Welcome, {{ user.get_short_name|default:user.username }}</h2>
+    <p style="color:var(--muted);">Pick a tool to get started.</p>
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .nav-links a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .profile-section {
-            position: relative;
-        }
-
-        .profile-icon {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            color: #333;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .profile-icon i {
-            margin-right: 8px;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            min-width: 150px;
-            border-radius: 8px;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            border-bottom: 1px solid #eee;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown-menu a:last-child {
-            border-bottom: none;
-        }
-
-        .profile-section:hover .dropdown-menu {
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header Section -->
-    <header>
-        <nav class="navbar">
-            <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-            <ul class="nav-links">
-                <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="{% url 'features' %}"><i class="fas fa-star"></i> Features</a></li>
-                <!-- <li><a href="testimonial.html"><i class="fas fa-comments"></i> Testimonials</a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact Us</a></li> -->
-            </ul>
-            <div class="profile-section">
-                <div class="profile-icon">
-                    <i class="fas fa-user-circle"></i> Profile
-                </div>
-                <div class="dropdown-menu">
-                    <!-- <a href="profilesettings.html"><i class="fas fa-cog"></i> Profile Settings</a> -->
-                    <a href="{% url 'home' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-    
-    <div class="content">
-        <h1><i class="fas fa-file-alt"></i> Welcome to ResumeChecker</h1>
-        <p>Enhance your resume and increase your chances of landing your dream job!</p>
-        <p>Scroll down to explore our features.</p>
-    
-        <!-- Upload Section -->
-        <!-- <div class="upload-section">
-            <h2><i class="fas fa-upload"></i> Upload Your Resume and Supporting Images</h2>
-            <label for="fileUpload" class="file-label"><i class="fas fa-file"></i> Upload Files (PDF, DOCX, JPG, PNG)</label>
-            <input type="file" id="fileUpload" accept=".pdf, .docx, .jpg, .jpeg, .png" multiple class="file-input">
-            <button id="analyzeButton" class="analyze-btn">
-                <i class="fas fa-arrow-right"></i> Analyze Files
-            </button> 
-        </div> -->
-    </div>    
-
-    <!--<script>
-        const analyzeButton = document.getElementById("analyzeButton");
-        analyzeButton.addEventListener("click", () => {
-            const fileInput = document.getElementById("fileUpload");
-            const files = fileInput.files;
-
-            if (files.length === 0) {
-                alert("Please upload at least one file!");
-                return;
-            }
-
-            const allowedExtensions = ['pdf', 'docx', 'jpg', 'jpeg', 'png'];
-            for (let i = 0; i < files.length; i++) {
-                const fileExtension = files[i].name.split('.').pop().toLowerCase();
-                if (!allowedExtensions.includes(fileExtension)) {
-                    alert(`Unsupported file format: ${files[i].name}`);
-
-                    return;
-                }
-            }
-
-            // Example score generation logic
-            const sampleScore = 90; // Replace with actual calculation logic
-            localStorage.setItem("resumeScore", sampleScore);
-
-            // Optionally, store file names for future reference (if required)
-            const fileNames = Array.from(files).map(file => file.name);
-            localStorage.setItem("uploadedFiles", JSON.stringify(fileNames));
-
-            window.location.href = "Calculation.html";
-        });
-    </script>-->
-</body>
-</html>
+    <div class="grid" style="margin-top:18px;">
+        <div class="card" style="margin:0;">
+            <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> Resume review</h3>
+            <p style="color:var(--muted); font-size:14px;">ATS score, section feedback and AI suggestions.</p>
+            <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Open</a>
+        </div>
+        <div class="card" style="margin:0;">
+            <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job matching</h3>
+            <p style="color:var(--muted); font-size:14px;">See which roles your resume fits best.</p>
+            <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Open</a>
+        </div>
+        <div class="card" style="margin:0;">
+            <h3><i class="fas fa-book" style="color:var(--brand);"></i> Resources</h3>
+            <p style="color:var(--muted); font-size:14px;">Courses to close your skill gaps.</p>
+            <a class="btn btn-primary" href="{% url 'home:recommend_resources' %}">Open</a>
+        </div>
+        <div class="card" style="margin:0;">
+            <h3><i class="fas fa-comments" style="color:var(--brand);"></i> Interview plan</h3>
+            <p style="color:var(--muted); font-size:14px;">Generate role-specific interview questions.</p>
+            <a class="btn btn-primary" href="{% url 'home:interview_plan' %}">Open</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

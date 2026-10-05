@@ -1,49 +1,26 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Resume Checker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'loginstyle.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="login-container">
-        <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
-        <p>Access your account and manage your resumes.</p>
+{% extends "base.html" %}
 
-        
-        <form method="post" action="{% url 'login' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username"><i class="fas fa-user"></i> Username</label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    name="username" 
-                    placeholder="Enter your username" 
-                    required>
-            </div>
-            <div class="form-group">
-                <label for="password"><i class="fas fa-lock"></i> Password</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="Enter your password" 
-                    required>
-            </div>
-            <button type="submit" class="login-btn">
-                <i class="fas fa-arrow-right"></i> Login
-            </button>
-        </form>
+{% block title %}Login - {{ SITE_NAME }}{% endblock %}
 
-    </div>
-</body>
-</html> 
+{% block content %}
+<section class="card" style="max-width:440px; margin:40px auto;">
+    <h2><i class="fas fa-sign-in-alt" style="color:var(--brand);"></i> Sign in</h2>
+    <p style="color:var(--muted);">Access your dashboard and resume tools.</p>
 
+    <form method="post" action="{% url 'home:login' %}">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required autofocus>
 
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
 
- 
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">Sign in</button>
+    </form>
+
+    <p style="text-align:center; margin-top:18px; font-size:14px;">
+        No account? <a href="{% url 'home:signup' %}">Create one</a> &middot;
+        <a href="{% url 'home:company_login' %}">Company login</a>
+    </p>
+</section>
+{% endblock %}

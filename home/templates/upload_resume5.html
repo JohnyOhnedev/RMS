@@ -1,82 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Resume</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 40px;
-        }
-        form {
-            background: #f4f4f4;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            width: 50%;
-        }
-        input, button {
-            margin-top: 10px;
-            padding: 8px;
-            width: 100%;
-        }
-        .message {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-    </style>
+{% block title %}Upload resume - {{ SITE_NAME }}{% endblock %}
 
-<script>
-    function uploadResume(event) {
-        event.preventDefault();
-        
-        let formData = new FormData();
-        let fileInput = document.getElementById("resume");
-        let messageBox = document.getElementById("message");
+{% block content %}
+<section class="card" style="max-width:620px; margin:30px auto;">
+    <h2><i class="fas fa-cloud-arrow-up" style="color:var(--brand);"></i> Upload resume</h2>
+    <p style="color:var(--muted);">
+        Duplicate uploads are detected automatically using a content hash.
+    </p>
 
-        if (fileInput.files.length === 0) {
-            messageBox.innerHTML = "<p style='color: red;'>Please select a file.</p>";
-            return;
-        }
-
-        formData.append("resume", fileInput.files[0]);
-
-        fetch("/upload-resume/", {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Server Response:", data); // Logs server response to browser console
-            
-            if (data.error) {
-                messageBox.innerHTML = `<p style='color: red;'>${data.error}</p>`;
-            } else {
-                messageBox.innerHTML = `<p style='color: green;'>${data.message}</p>`;
-                fileInput.value = ""; // Reset file input after successful upload
-            }
-        })
-        .catch(error => {
-            console.error("Upload error:", error);
-            messageBox.innerHTML = "<p style='color: red;'>Error uploading file. Check the console for details.</p>";
-        });
-    }
-</script>
-
-</head>
-<body>
-
-    <h2>Upload Your Resume</h2>
-    <form onsubmit="uploadResume(event)">
-        <label for="resume"><strong>Select Resume (PDF/DOCX only):</strong></label>
-        <input type="file" id="resume" name="resume" accept=".pdf,.docx" required>
-        <button type="submit">Upload</button>
+    <form id="dedupForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="resume">Choose your resume</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
+        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+            <i class="fas fa-upload"></i> Upload
+        </button>
     </form>
 
-    <div id="message" class="message"></div>
+    <div id="result" style="margin-top:16px;"></div>
+</section>
+{% endblock %}
 
-</body>
-</html>
+{% block extra_js %}
+<script>
+    document.getElementById("dedupForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var form = event.target;
+        var data = new FormData(form);
+        var box = document.getElementById("result");
+        box.innerHTML = "<p>Uploading...</p>";
+
+        fetch(form.action || window.location.href, {
+            method: "POST",
+            body: data,
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+            .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, body: b }; }); })
+            .then(function (res) {
+                var cls = res.ok ? "good" : "bad";
+                box.innerHTML = '<p class="badge ' + cls + '">' + (res.body.message || res.body.error) + "</p>";
+                if (res.ok) form.reset();
+            })
+            .catch(function () {
+                box.innerHTML = '<p class="badge bad">Upload failed. Please try again.</p>';
+            });
+    });
+</script>
+{% endblock %}

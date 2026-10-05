@@ -1,78 +1,31 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup - Resume Checker</title>
-    <link rel="stylesheet" href="{% static 'signupstyle.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        button {
-            display: inline-block;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ffffff;
-            background: linear-gradient(135deg, #26d0ce, #0f3460); /* Teal and deep blue */
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease, transform 0.2s ease;
-            box-shadow: 0px 8px 20px rgba(38, 208, 206, 0.4);
-            text-transform: uppercase;
-            outline: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="signup-container">
-        <h1>Create an Account</h1>
-        <form method="post">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="username">Username</label>
-                {{ form.username }}
-            </div>
+{% extends "base.html" %}
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                {{ form.email }}
-            </div>
+{% block title %}Sign up - {{ SITE_NAME }}{% endblock %}
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                {{ form.password }}
-            </div>
+{% block content %}
+<section class="card" style="max-width:480px; margin:40px auto;">
+    <h2><i class="fas fa-user-plus" style="color:var(--brand);"></i> Create your account</h2>
+    <p style="color:var(--muted);">Free access to ATS scoring, job matching and resources.</p>
 
-            <div class="form-group">
-                <label for="password_confirmation">Confirm Password</label>
-                {{ form.password_confirmation }}
-            </div>
+    <form method="post" action="{% url 'home:signup' %}">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="messages">{% for error in form.non_field_errors %}<li class="error">{{ error }}</li>{% endfor %}</div>
+        {% endif %}
 
-            {% if form.errors %}
-                <div class="form-errors">
-                    <ul>
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
-    <!--<div>
-        {% for message in messages %}
-            <div class="alert {{ message.tags }}">
-                {{ message }}
-            </div>
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+            {% for error in field.errors %}<div class="help" style="color:var(--bad);">{{ error }}</div>{% endfor %}
         {% endfor %}
-    </div>-->
-    
-</body>
-</html>
+
+        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">Create account</button>
+    </form>
+
+    <p style="text-align:center; margin-top:18px; font-size:14px;">
+        Already registered? <a href="{% url 'home:login' %}">Sign in</a> &middot;
+        <a href="{% url 'home:company_signup' %}">Register a company</a>
+    </p>
+</section>
+{% endblock %}

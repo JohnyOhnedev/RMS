@@ -1,259 +1,42 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/*
+ * homepagestyle.css
+ *
+ * The original degree-project stylesheet lived here: a dark animated gradient
+ * on <body>, a position:fixed header and absolute-positioned nav elements.
+ * Every page now extends home/templates/base.html, which owns all styling, so
+ * this file is intentionally minimal. It is kept (and still linked) so the
+ * static-files pipeline and any external bookmarks continue to work.
+ *
+ * Keep this file's rules to global, layout-safe defaults only.
+ */
+
+html {
+    scroll-behavior: smooth;
 }
 
-/* Body Styling */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1a2980, #26d0ce, #141e30);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden;
-    padding: 0 20px;
+img,
+video {
+    max-width: 100%;
+    height: auto;
 }
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Header Styling */
-header {
-    width: 100%;
-    padding: 20px 0;
-    background: linear-gradient(to right, rgba(26, 41, 128, 0.95), rgba(38, 208, 206, 0.95));
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-}
-
-/* Navbar Styling */
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Logo */
-.logo {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffffff;
-    text-shadow: 0px 0px 15px #26d0ce;
-}
-
-/* Navigation Links */
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-}
-
-.nav-links a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1rem;
-    position: relative;
-    transition: color 0.3s ease;
-    padding: 5px 10px;
-}
-
-.nav-links a::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: #26d0ce;
-    bottom: -3px;
-    left: 0;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease;
-}
-
-.nav-links a:hover::before {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-.nav-links a:hover {
-    color: #26d0ce;
-}
-
-/* Auth Buttons */
-.auth-buttons {
-    display: flex;
-    gap: 20px;
-}
-
-.btn {
-    padding: 10px 25px;
-    font-size: 0.9rem;
-    text-decoration: none;
-    border-radius: 30px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-    transform: scale(0);
-    transition: transform 0.5s ease;
-    opacity: 0.8;
-}
-
-.btn:hover::before {
-    transform: scale(1);
-}
-
-.login-btn {
-    color: #1a2980;
-    border: 1px solid #1a2980;
-    background: transparent;
-}
-
-.signup-btn {
-    color: #ffffff;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
-    box-shadow: 0px 4px 20px rgba(255, 117, 140, 0.5);
-}
-
-.login-btn:hover {
-    color: #ffffff;
-    background-color: #1a2980;
-}
-
-.signup-btn:hover {
-    background: linear-gradient(to right, #ff5f7e, #ff758c);
-}
-
-/* Main Content Styling */
-.content {
-    max-width: 800px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
-    padding: 40px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    animation: fadeIn 2s ease;
-    margin: 120px auto;
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.content h1 {
-    font-size: 2.5rem;
-    color: #ffffff;
-    margin-bottom: 20px;
-    text-shadow: 0px 0px 15px #26d0ce;
-    animation: glow 1.5s ease infinite;
-}
-
-@keyframes glow {
-    0%, 100% { text-shadow: 0px 0px 10px #26d0ce; }
-    50% { text-shadow: 0px 0px 20px #26d0ce; }
-}
-
-.content p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    color: #dfe7ef;
-}
-
-/* Upload Section Styling */
-.upload-section {
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    animation: float 3s ease-in-out infinite;
-}
-
-.upload-section h2 {
-    color: #ffffff;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-}
-
-.file-label {
-    display: block;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    color: #dfe7ef;
-    font-weight: 600;
-}
-
-.file-input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #26d0ce;
+code {
+    background: #f1f5f9;
+    padding: 2px 6px;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    cursor: pointer;
-    outline: none;
+    font-size: 0.9em;
 }
 
-/* Analyze Button Styling */
-.analyze-btn {
-    background: linear-gradient(135deg, #4CAF50, #34d399);
-    color: white;
-    padding: 15px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background 0.5s ease;
-    display: inline-block;
-    position: relative;
-    margin-top: 20px;
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+/* Visible focus ring for keyboard users. */
+:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
 }
 
-.analyze-btn i {
-    margin-left: 10px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.analyze-btn:hover {
-    background: linear-gradient(135deg, #34d399, #4CAF50);
-    transform: scale(1.05);
-}
-
-.analyze-btn:hover i {
-    transform: translateX(5px);
+@media print {
+    .navbar,
+    .footer,
+    .btn {
+        display: none !important;
+    }
 }

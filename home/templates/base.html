@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'homepagestyle.css' %}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --brand: #4f46e5;
+            --brand-dark: #4338ca;
+            --ink: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --bg: #f8fafc;
+            --ok: #059669;
+            --warn: #d97706;
+            --bad: #dc2626;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        a { color: var(--brand); }
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+        /* Offset content so the sticky navbar never covers it. */
+        main.container { padding-top: 28px; }
+
+        .navbar {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; padding: 14px 24px; background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+            position: sticky; top: 0; z-index: 50; flex-wrap: wrap;
+        }
+        .navbar .logo { font-weight: 700; font-size: 20px; color: var(--brand); }
+        .navbar .logo i { margin-right: 6px; }
+        .nav-links { list-style: none; display: flex; gap: 6px; margin: 0; padding: 0; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--ink); font-weight: 500;
+            padding: 8px 12px; border-radius: 8px; font-size: 15px;
+        }
+        .nav-links a:hover { background: #eef2ff; color: var(--brand-dark); }
+        .nav-links a.active { background: #eef2ff; color: var(--brand-dark); }
+
+        .btn {
+            display: inline-block; border: 0; cursor: pointer; font-family: inherit;
+            padding: 10px 18px; border-radius: 9px; font-size: 15px; font-weight: 600;
+            text-decoration: none; transition: background .15s, transform .05s;
+        }
+        .btn:active { transform: translateY(1px); }
+        .btn-primary { background: var(--brand); color: #fff; }
+        .btn-primary:hover { background: var(--brand-dark); }
+        .btn-ghost { background: #eef2ff; color: var(--brand-dark); }
+        .btn-danger { background: var(--bad); color: #fff; }
+        .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+        .card {
+            background: #fff; border: 1px solid var(--line); border-radius: 14px;
+            padding: 24px; margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(16,24,40,.04);
+        }
+        .card h2, .card h3 { margin-top: 0; }
+
+        input[type=text], input[type=email], input[type=password], input[type=file],
+        textarea, select {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--line);
+            border-radius: 9px; font-family: inherit; font-size: 15px; background: #fff;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid #c7d2fe; border-color: var(--brand);
+        }
+        label { display: block; font-weight: 500; margin: 14px 0 6px; font-size: 14px; }
+        .help { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+        .messages { list-style: none; padding: 0; margin: 16px 0; }
+        .messages li {
+            padding: 12px 16px; border-radius: 9px; margin-bottom: 8px; font-size: 14px;
+            border-left: 4px solid var(--brand); background: #eef2ff;
+        }
+        .messages li.success { border-color: var(--ok); background: #ecfdf5; }
+        .messages li.error   { border-color: var(--bad); background: #fef2f2; }
+        .messages li.warning { border-color: var(--warn); background: #fffbeb; }
+        .messages li.info    { border-color: var(--brand); background: #eef2ff; }
+
+        .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
+        .grid > .card { display: flex; flex-direction: column; }
+        .grid > .card > .btn:last-child { margin-top: auto; align-self: flex-start; }
+
+        .badge {
+            display: inline-block; padding: 3px 10px; border-radius: 999px;
+            font-size: 12px; font-weight: 600;
+        }
+        .badge.good { background: #ecfdf5; color: var(--ok); }
+        .badge.warn { background: #fffbeb; color: var(--warn); }
+        .badge.bad  { background: #fef2f2; color: var(--bad); }
+        .badge.pending  { background: #fffbeb; color: var(--warn); }
+        .badge.approved { background: #ecfdf5; color: var(--ok); }
+        .badge.rejected { background: #fef2f2; color: var(--bad); }
+
+        .score-ring {
+            display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+        }
+        .score-value {
+            font-size: 46px; font-weight: 700; line-height: 1;
+            color: var(--brand);
+        }
+
+        .markdown { white-space: pre-wrap; word-wrap: break-word; font-size: 15px; }
+        .markdown h2 { font-size: 19px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+        .markdown h3 { font-size: 16px; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+        th { background: #f9fafb; font-weight: 600; }
+
+        .footer {
+            text-align: center; color: var(--muted); font-size: 13px;
+            padding: 34px 20px;
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 12px 16px; }
+            .card { padding: 18px; }
+            .score-value { font-size: 36px; }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-check-circle"></i> {{ SITE_NAME }}</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home:home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{% url 'home:features' %}" {% if request.resolver_match.url_name == 'features' %}class="active"{% endif %}><i class="fas fa-star"></i> Features</a></li>
+            <li><a href="{% url 'home:predict_roles' %}"><i class="fas fa-briefcase"></i> Job Match</a></li>
+            <li><a href="{% url 'home:recommend_resources' %}"><i class="fas fa-book"></i> Resources</a></li>
+        </ul>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <a href="{% url 'home:review_queue' %}" class="btn btn-ghost btn-sm"><i class="fas fa-clipboard-check"></i> Review Queue</a>
+                {% endif %}
+                <a href="{% url 'home:company_dashboard' %}" class="btn btn-ghost btn-sm"><i class="fas fa-gauge"></i> Dashboard</a>
+                <a href="{% url 'home:logout' %}" class="btn btn-primary btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="{% url 'home:company_login' %}" class="btn btn-ghost btn-sm"><i class="fas fa-building"></i> Company</a>
+                <a href="{% url 'home:login' %}" class="btn btn-ghost btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{% url 'home:signup' %}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+<main class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>{{ SITE_NAME }} &mdash; AI-assisted resume review, job matching and skill recommendations.</p>
+    {% if not ai_enabled %}<p><small>Running in offline mode. Add a <code>GEMINI_API_KEY</code> to enable AI features.</small></p>{% endif %}
+</footer>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

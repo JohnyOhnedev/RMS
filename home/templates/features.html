@@ -1,309 +1,74 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Features</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block title %}Features - {{ SITE_NAME }}{% endblock %}
 
-        /* Body Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a2980, #26d0ce, #141e30);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+{% block content %}
+<section class="card" style="text-align:center;">
+    <h1 style="margin:0 0 8px;">Everything you need to land the interview</h1>
+    <p style="color:var(--muted); margin:0;">
+        {{ SITE_NAME }} combines ATS scoring, semantic job matching and curated learning paths.
+    </p>
+</section>
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+<section class="grid">
+    <div class="card">
+        <h3><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> ATS score &amp; review</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>0-100 score across contact, structure, skills, experience, education and impact</li>
+            <li>Quantified-achievement detection</li>
+            <li>Prioritised action list</li>
+        </ul>
+        <a class="btn btn-primary" href="{% url 'home:process_resume' %}">Analyze resume</a>
+    </div>
 
-        /* Header Styling */
-        header {
-            width: 100%;
-            padding: 20px 0;
-            background: linear-gradient(to right, rgba(26, 41, 128, 0.95), rgba(38, 208, 206, 0.95));
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
+    <div class="card">
+        <h3><i class="fas fa-briefcase" style="color:var(--brand);"></i> Job role matching</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>TF-IDF similarity against 20+ role profiles</li>
+            <li>Percentage match per role</li>
+            <li>Companies can extend the role dataset from their dashboard</li>
+        </ul>
+        <a class="btn btn-primary" href="{% url 'home:predict_roles' %}">Match my resume</a>
+    </div>
 
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
+    <div class="card">
+        <h3><i class="fas fa-book" style="color:var(--brand);"></i> Learning resources</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>Field detection from your skill set</li>
+            <li>Curated courses for Data Science, Web, Mobile, UX/UI</li>
+            <li>Free and paid options</li>
+        </ul>
+        <a class="btn btn-primary" href="{% url 'home:recommend_resources' %}">Get recommendations</a>
+    </div>
 
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0px 0px 15px #26d0ce;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    <div class="card">
+        <h3><i class="fas fa-comments" style="color:var(--brand);"></i> Interview plans</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>Technical questions tailored to listed skills</li>
+            <li>Behavioural and culture-fit questions</li>
+            <li>Suggested practical task and red flags to probe</li>
+        </ul>
+        <a class="btn btn-primary" href="{% url 'home:interview_plan' %}">Generate a plan</a>
+    </div>
 
-        .logo i {
-            font-size: 1.5rem;
-        }
+    <div class="card">
+        <h3><i class="fas fa-building" style="color:var(--brand);"></i> For companies</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>Register once, await admin approval</li>
+            <li>Define roles and required skills</li>
+            <li>Match candidates against your live role data</li>
+        </ul>
+        <a class="btn btn-primary" href="{% url 'home:company_signup' %}">Register a company</a>
+    </div>
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1rem;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: #26d0ce;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #26d0ce;
-        }
-
-        .nav-links a:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        /* Profile Dropdown Styling */
-        .profile {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .profile-button {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 1rem;
-            color: #ffffff;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            transition: background 0.3s ease;
-        }
-
-        .profile-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-        }
-
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: rgba(26, 41, 128, 0.95);
-            border-radius: 10px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .profile:hover .profile-dropdown {
-            display: flex;
-        }
-
-        .profile-dropdown a {
-            padding: 10px 15px;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            background: none;
-            transition: background 0.3s ease;
-        }
-
-        .profile-dropdown a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Features Section */
-        .features-container {
-            margin: 150px auto;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            backdrop-filter: blur(10px);
-            animation: fadeInFeatures 2s ease forwards;
-        }
-
-        @keyframes fadeInFeatures {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
-
-        .features-container h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0px 0px 15px #26d0ce;
-        }
-
-        .feature-option {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease, background 0.5s ease;
-        }
-
-        .feature-option:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, #4CAF50, #2ECC71);
-            color: #ffffff;
-        }
-
-        .feature-option i {
-            font-size: 3rem;
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-
-        .feature-option h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .feature-option p {
-            font-size: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-            <ul class="nav-links">
-                <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-                <!-- <li><a href="#"><i class="fas fa-star"></i> Features</a></li>
-                <li><a href="testimonial.html"><i class="fas fa-comments"></i> Testimonials</a></li>
-                <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li> -->
-            </ul>
-            <div class="profile">
-                <button class="profile-button"><i class="fas fa-user"></i> Profile</button>
-                <div class="profile-dropdown">
-                    <!-- <a href="profilesettings.html">Profile Settings</a> -->
-                    <a href="{% url 'home' %}">Logout</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <section class="features-container">
-        <h1><i class="fas fa-star"></i> Features</h1>
-        
-        <!-- <div class="feature-option" onclick="redirectTo('{% url 'upload_resume' %}')">
-            <i class="fas fa-lightbulb"></i>
-            <h2>Get Recommendations</h2>
-            <p>Receive personalized suggestions based on your resume.</p>
-        </div> -->
-
-        <div class="feature-option" onclick="redirectTo('upload.html')">
-            
-            <i class="fas fa-lightbulb"></i>
-            <h2>Get Recommendations</h2>
-            <!-- <p>Receive personalized suggestions based on your resume.</p> -->
-        </div>
-        
-        
-         <!-- <div class="feature-option" onclick="redirectTo('{% url "upload_resume" %}')">
-            <i class="fas fa-lightbulb"></i>
-            <h2>Get Recommendations</h2>
-            <p>Receive personalized suggestions based on your resume.</p>
-        </div> -->
-        
-
-        <div class="feature-option" onclick="redirectTo('upload_resume.html')">
-            <i class="fas fa-question-circle"></i>
-            <h2>Get Your Job Role Recommendations</h2>
-            <!-- <p>Access tailored interview questions to prepare better.</p> -->
-        </div>
-        
-        
-
-
-        <!-- <div class="feature-option" onclick="redirectTo('upload3.html')">
-            <i class="fas fa-question-circle"></i>
-            <h2>Course Recommendations</h2>
-            <p>Access tailored interview questions to prepare better.</p>
-        </div> -->
-        <!-- <div class="feature-option" onclick="redirectToCourse()">
-            <i class="fas fa-question-circle"></i>
-            <h2>Course Recommendations</h2>
-            <p>Access tailored courses to prepare better.</p> 
-        </div> -->
-        <div class="feature-option" onclick="redirectTo('upload3.html')">
-            <i class="fas fa-question-circle"></i>
-            <h2>Course Recommendations</h2>
-            <!-- <p>Access tailored interview questions to prepare better.</p> -->
-        </div>
-
-        <div class="feature-option" onclick="redirectTo('upload4.html')">
-            <i class="fas fa-question-circle"></i>
-            <h2>Interview questions</h2>
-            <!-- <p>Access tailored interview questions to prepare better.</p> -->
-        </div>
-
-        <!-- <div class="feature-option" onclick="redirectTo('upload_resume5.html')">
-            <i class="fas fa-question-circle"></i>
-            <h2>Resume Explorer</h2>
-            <p>Access tailored interview questions to prepare better.</p>
-        </div>
-         -->
-        <!-- <div class="feature-option">
-            <i class="fas fa-cogs"></i>
-            <h2>Future Feature</h2>
-            <p>This feature is under development. Stay tuned!</p>
-        </div> -->
-    </section>
-    <script>
-        function redirectTo(url) {
-            window.location.href = url;
-        }
-        function redirectToCourse() {
-        window.location.href = "{% url 'upload_resume' %}";
-    }
-    </script>
-    
-</body>
-</html>
+    <div class="card">
+        <h3><i class="fas fa-shield-halved" style="color:var(--brand);"></i> Privacy &amp; safety</h3>
+        <ul style="padding-left:18px; color:var(--muted); font-size:14px;">
+            <li>Uploads validated by type and size</li>
+            <li>Duplicate detection via SHA-256</li>
+            <li>Works fully offline - AI features are optional</li>
+        </ul>
+        <a class="btn btn-ghost" href="{% url 'home:home' %}">Start now</a>
+    </div>
+</section>
+{% endblock %}

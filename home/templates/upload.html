@@ -1,191 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Your Resume</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends "base.html" %}
 
-        /* Body Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a2980, #26d0ce, #141e30);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+{% block title %}Resume review - {{ SITE_NAME }}{% endblock %}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+{% block content %}
+<section class="card" style="max-width:620px; margin:30px auto;">
+    <h2><i class="fas fa-magnifying-glass-chart" style="color:var(--brand);"></i> Resume review</h2>
+    <p style="color:var(--muted);">
+        Get an ATS score out of 100, a breakdown by section and a prioritised list of improvements.
+    </p>
 
-        /* Header Styling */
-        header {
-            width: 100%;
-            padding: 20px 0;
-            background: linear-gradient(to right, rgba(26, 41, 128, 0.95), rgba(38, 208, 206, 0.95));
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0px 0px 15px #26d0ce;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        .upload-container {
-            margin: 150px auto;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .upload-container h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .upload-container input[type="file"] {
-            margin: 20px 0;
-            padding: 10px;
-        }
-
-        .upload-container button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #4CAF50, #2ECC71);
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.5s ease;
-        }
-
-        .loading-screen.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .circular-progress {
-            width: 150px;
-            height: 150px;
-            position: relative;
-        }
-
-        .circular-progress .circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(#26d0ce 0%, #1a2980 50%, transparent 0);
-            animation: rotate 2s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
-            color: #ffffff;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo"><i class="fas fa-check-circle"></i> ResumeChecker</div>
-            <ul class="nav-links">
-                <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="{% url 'features' %}"><i class="fas fa-home"></i> Features</a></li>
-                <!-- <li><a href="#"><i class="fas fa-star"></i> Features</a></li>
-                <li><a href="testimonial.html"><i class="fas fa-comments"></i> Testimonials</a></li>
-                <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li> -->
-            </ul>
-        </nav>
-    </header>
-    <section class="upload-container">
-        <h1><i class="fas fa-upload"></i> Upload Your Resume</h1>
-        <form id="uploadForm" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="resume">Select a file:</label>
-            <input type="file" name="resume" accept=".pdf,.docx,.txt" required>
-            <button type="submit">Analyze</button>
-        </form>
-    </section>
-
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="circular-progress">
-            <div class="circle"></div>
-            <div class="loading-text">Analyzing Your Resume...</div>
-        </div>
-    </div>
-
-    <script>
-        const form = document.getElementById('uploadForm');
-        const loadingScreen = document.getElementById('loadingScreen');
-
-        form.addEventListener('submit', function (e) {
-            loadingScreen.classList.add('active');
-        });
-    </script>
-</body>
-</html>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="resume">Choose your resume</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt,.md,.rtf" required>
+        <div class="help">Accepted: PDF, DOCX, TXT. Maximum 8 MB.</div>
+        <button type="submit" class="btn btn-primary" style="margin-top:18px; width:100%;">
+            <i class="fas fa-wand-magic-sparkles"></i> Analyze resume
+        </button>
+    </form>
+</section>
+{% endblock %}
