@@ -12,7 +12,7 @@ versions and a proper service layer.
 | Feature | Description |
 |---|---|
 | **ATS resume review** | Scores a resume 0–100 across contact details, structure, skills, experience, education and quantified impact, with a prioritised action list. |
-| **Job-role matching** | Ranks the resume against 20+ job-role skill profiles using TF-IDF cosine similarity. |
+| **Job-role matching** | Ranks the resume against 60+ job-role skill profiles using TF-IDF cosine similarity. |
 | **Learning resources** | Detects the resume's field(s) and recommends curated courses (Data Science, Web, Mobile, UI/UX). |
 | **Interview plans** | Generates a tailored interview plan (technical, behavioural, culture-fit questions). |
 | **Company workspace** | Companies register (subject to admin approval), define job roles and required skills. |

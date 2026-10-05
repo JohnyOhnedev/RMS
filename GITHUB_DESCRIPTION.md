@@ -80,7 +80,7 @@ Drop this at the top of README.md, under the title.
 - **ATS scoring engine** — 0-100 across six weighted dimensions (contact,
   structure, skills, experience, education, quantified impact) with actionable
   feedback, not just a number.
-- **Semantic job matching** — TF-IDF + cosine similarity against 20+ job-role
+- **Semantic job matching** — TF-IDF + cosine similarity against 60+ job-role
   skill profiles, with a cached model that retrains when the dataset changes.
 - **Broad skill taxonomy** — 150+ skills across 10 categories, with
   case-insensitive matching and category-level reporting.
